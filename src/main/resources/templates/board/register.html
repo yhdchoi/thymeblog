@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+
+<th:block th:replace="~{/basic :: setContent(~{this::content} )}">
+  <th:block th:fragment="content">
+
+    <div class="container mt-4">
+      <h1 class="text-center">Write New</h1>
+
+      <form class="px-5" th:action="@{/board/register}" th:object="${board}" th:method="post">
+
+
+        <input type="hidden" th:field="*{id}" />
+
+        <div class="form-group mt-2">
+          <label for="title"> Title: </label>
+          <input type="text" class="form-control" th:field="*{title}" id="title"
+            placeholder="Title here..." />
+          <!--  <div class="invalid-feedback" th:if="${#fields.hasErrors('title')}" th:errors="*{title}">Please
+            provide a title with 5 to 50 characters long.</div> -->
+
+        </div>
+
+        <div class="form-group mt-2">
+          <label> Content: </label>
+          <textarea class="form-control" th:field="*{content}" id="content" rows="5"
+            placeholder="Your thoughts here..."></textarea>
+          <!-- <div class="invalid-feedback" th:if="${#fields.hasErrors('content')}"
+            th:errors="*{content}">Please provide a title with 5 to 50 characters long.</div> -->
+        </div>
+
+        <div class="text-right">
+          <button type="submit" class="btn btn-primary mt-4">Post</button>
+          <a type="submit" class="btn btn-warning mt-4" th:href="@{/}">Cancel</a>
+        </div>
+
+      </form>
+    </div>
+
+  </th:block>
+</th:block>

@@ -1,0 +1,88 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+
+<th:block th:replace="~{/basic :: setContent(~{this::content})}">
+  <th:block th:fragment="content">
+
+    <div class="container my-4">
+      <h1 class="text-center">List</h1>
+      <div>
+        <p>Total: <span th:text="${#lists.size(boards)}"></span></p>
+      </div>
+
+      <!-- <form action="/board/list" method="get" id="searchForm">
+        <div class="input-group">
+          <input type="hidden" name="page" value="1" />
+          <div class="input-group-prepend">
+            <select class="form-select" name="type">
+
+              <option th:selected="${pageRequestDTO.type == null}">--- Please Select One
+                ---</option>
+              <option value="t" th:selected="${pageRequestDTO.type == 't'}">Title</option>
+              <option value="c" th:selected="${pageRequestDTO.type == 'c'}">Content</option>
+              <option value="w" th:selected="${pageRequestDTO.type == 'w'}">Writer</option>
+              <option value="tc" th:selected="${pageRequestDTO.type == 'tc'}">Title +
+                Content</option>
+              <option value="tcw" th:selected="${pageRequestDTO.type == 'tcw'}">Title +
+                Content + Writer</option>
+
+            </select>
+          </div>
+
+          <input class="form-control mx-2" name="keyword" th:value="${pageRequestDTO.keyword}"
+            placeholder="Search..." />
+
+          <div class="input-group-append" id="button-addon4">
+            <button class="btn btn-outline-secondary btn-search" type="button">Search</button>
+            <button class="btn btn-outline-secondary btn-clear" type="button">Clear</button>
+          </div>
+        </div>
+      </form> -->
+
+      <table class="table table-hover">
+        <thead>
+          <tr>
+            <th scope="col">#</th>
+            <th scope="col">Title</th>
+            <th scope="col">Username</th>
+            <th scope="col">Written on</th>
+            <th scope="col">Edited on</th>
+
+          </tr>
+        </thead>
+        <tbody>
+          <tr th:each="board : ${boards}">
+
+            <td th:text="${board.id}"></td>
+            <td><a class="text-decoration-none" th:text="${board.title}" th:href="@{/board/read(id=${board.id})}"></a></td>
+            <td>Username</td>
+            <td th:text="${#temporals.format(board.regDate, 'yyyy/MM/dd')}"></td>
+            <td th:text="${#temporals.format(board.modDate, 'yyyy/MM/dd')}"></td>
+          </tr>
+
+        </tbody>
+      </table>
+
+      <!-- <ul class="pagination h-100 justify-content-center align-items-center">
+        <li class="page-item" th:if="${result.prev}">
+          <a class="page-link"
+            th:href="@{/board/list(page = ${result.start - 1}, type = ${pageRequestDTO.type}, keyword = ${pageRequestDTO.keyword})}"
+            tabindex="-1"> Previous </a>
+        </li>
+        <li class="'page-item' + ${result.page == page ? 'active' : ''}"
+          th:each="page : ${result.pageList}">
+          <a class="page-link"
+            th:href="@{/board/list(page=${page}, type=${pageRequestDTO.type}, keyword=${pageRequestDTO.keyword})}">
+            [[${page}]] </a>
+        </li>
+        <li class="page-item" th:if="${result.next}">
+          <a class="page-link"
+            th:href="@{/board/list(page=${result.end + 1}, type=${pageRequsetDTO.type}, keyword=${pageRequestDTO.keyword})}">
+            Next </a>
+        </li>
+      </ul> -->
+
+    </div>
+
+  </th:block>
+</th:block>
