@@ -19,7 +19,7 @@ public class BoardRepoTest {
 	@Test
 	public void insert() {
 		
-		IntStream.rangeClosed(1, 10).forEach(i -> {						
+		IntStream.rangeClosed(11, 50).forEach(i -> {						
 			Board board = Board.builder().title("Title..." + i).content("Board content..." + i)
 					.build();
 

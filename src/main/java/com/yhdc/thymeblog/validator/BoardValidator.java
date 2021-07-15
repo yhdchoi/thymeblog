@@ -8,20 +8,21 @@ import org.thymeleaf.util.StringUtils;
 import com.yhdc.thymeblog.model.Board;
 
 @Component
-public class BoardValidator implements Validator{
+public class BoardValidator implements Validator {
 
 	@Override
 	public boolean supports(Class<?> clazz) {
-        return Board.class.equals(clazz);
-    }
+		return Board.class.equals(clazz);
+	}
 
 	@Override
-    public void validate(Object obj, Errors e) {
-        Board b = (Board) obj;
-        
-        if (StringUtils.isEmpty(b.getContent())) {
-            e.rejectValue("content", "key", "Please insert content.");        
-        }		
-    }
-	
+	public void validate(Object obj, Errors e) {
+
+		Board b = (Board) obj;
+
+		if (StringUtils.isEmpty(b.getContent())) {
+			e.rejectValue("content", "key", "The content cannot be empty.");
+		}
+	}
+
 }

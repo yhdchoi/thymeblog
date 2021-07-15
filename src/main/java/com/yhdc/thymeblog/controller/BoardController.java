@@ -1,7 +1,10 @@
 package com.yhdc.thymeblog.controller;
 
-import java.util.List;
+import javax.validation.Valid;
 
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
@@ -14,6 +17,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 
 import com.yhdc.thymeblog.model.Board;
 import com.yhdc.thymeblog.repository.BoardRepository;
+import com.yhdc.thymeblog.validator.BoardValidator;
 
 import lombok.RequiredArgsConstructor;
 
@@ -23,14 +27,19 @@ import lombok.RequiredArgsConstructor;
 public class BoardController {
 
 	private final BoardRepository repository;
-//	private final BoardValidator validator;
+	private final BoardValidator validator;
 
 	// List board
 	@GetMapping("/list")
-	public String list(Model model) {
+	public String list(Model model, Pageable pageable) {
 
-		List<Board> boards = repository.findAll();
-
+		Page<Board> boards = repository.findAll(PageRequest.of(0, 10));
+		
+		int startPage = Math.max(1, boards.getPageable().getPageNumber() - 11);
+		int endPage = Math.min(boards.getTotalPages(), boards.getPageable().getPageNumber() + 11);		
+		
+		model.addAttribute("startPage", startPage);
+		model.addAttribute("endPage", endPage);
 		model.addAttribute("boards", boards);
 
 		return "board/list";
@@ -52,20 +61,20 @@ public class BoardController {
 	public String register(Model model) {
 
 		model.addAttribute("board", new Board());
-		
+
 		return "board/register";
 	}
 
 	// Save
 	@PostMapping("/register")
-	public String registerBoard(@ModelAttribute Board board) {
+	public String registerBoard(@Valid Board board, BindingResult bindingResult) {
 
-//		validator.validate(newBoard, bindingResult);
-//		
-//		if (bindingResult.hasErrors()) {
-//			return "board/register";
-//		}
-		
+		validator.validate(board, bindingResult);
+
+		if (bindingResult.hasErrors()) {
+			return "board/register";
+		}
+
 		repository.save(board);
 
 		return "redirect:/board/list";
@@ -95,7 +104,7 @@ public class BoardController {
 	}
 
 	// Remove
-	@DeleteMapping("/delete/{id}")
+	@DeleteMapping("/delete")
 	public String deleteBoard(@RequestParam Long id) {
 
 		repository.deleteById(id);
