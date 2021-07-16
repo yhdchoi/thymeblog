@@ -3,12 +3,11 @@ package com.yhdc.thymeblog.controller;
 import javax.validation.Valid;
 
 import org.springframework.data.domain.Page;
-import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
+import org.springframework.data.web.PageableDefault;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
-import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -31,13 +30,15 @@ public class BoardController {
 
 	// List board
 	@GetMapping("/list")
-	public String list(Model model, Pageable pageable) {
+	public String list(Model model, @PageableDefault(10) Pageable pageable,
+			@RequestParam(required = false, defaultValue = "") String searchText) {
 
-		Page<Board> boards = repository.findAll(PageRequest.of(0, 10));
-		
-		int startPage = Math.max(1, boards.getPageable().getPageNumber() - 11);
-		int endPage = Math.min(boards.getTotalPages(), boards.getPageable().getPageNumber() + 11);		
-		
+//		Page<Board> boards = repository.findAll(pageable);
+		Page<Board> boards = repository.findByTitleContainingOrContentContaining(searchText, searchText, pageable);
+
+		int startPage = Math.max(1, boards.getPageable().getPageNumber() - 9);
+		int endPage = Math.min(boards.getTotalPages(), boards.getPageable().getPageNumber() + 9);
+
 		model.addAttribute("startPage", startPage);
 		model.addAttribute("endPage", endPage);
 		model.addAttribute("boards", boards);
@@ -82,29 +83,25 @@ public class BoardController {
 
 	// Update form
 	@GetMapping("/update")
-	public String update(Model model) {
+	public String update(Model model, @RequestParam Long id) {
 
-		model.addAttribute("board", new Board());
+		Board board = repository.findById(id).orElse(null);
+		model.addAttribute("board", board);
 
 		return "board/update";
 	}
 
 	// Save update
 	@PostMapping("/update")
-	public String updateBoard(@ModelAttribute Board updateBoard, @RequestParam Long id) {
-
-		Board board = repository.getById(id);
-
-		board.setTitle(updateBoard.getTitle());
-		board.setContent(updateBoard.getContent());
+	public String updateBoard(@ModelAttribute Board board) {
 
 		repository.save(board);
 
-		return "redirect:/board/read";
+		return "redirect:/board/list";
 	}
 
 	// Remove
-	@DeleteMapping("/delete")
+	@GetMapping("/delete")
 	public String deleteBoard(@RequestParam Long id) {
 
 		repository.deleteById(id);
