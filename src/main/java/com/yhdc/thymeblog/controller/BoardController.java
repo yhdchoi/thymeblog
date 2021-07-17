@@ -8,7 +8,6 @@ import org.springframework.data.domain.Sort;
 import org.springframework.data.web.PageableDefault;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -47,57 +46,44 @@ public class BoardController {
 	// Detail
 	@GetMapping("/read")
 	public String detail(Model model, @RequestParam Long id) {
-
 		Board board = boardService.getDetail(id);
-
 		model.addAttribute("board", board);
-
 		return "board/read";
 	}
 
 	// New form
 	@GetMapping("/register")
 	public String registerForm(Model model) {
-
 		model.addAttribute("board", new Board());
-
 		return "board/register";
 	}
 
 	// New save
 	@PostMapping("/register")
-	public String registerBoard(@Valid Board board, BindingResult bindingResult) {
-
-		boardService.register(board, bindingResult);
-
+	public String registerBoard(@Valid Board board) {
+		boardService.register(board);
 		return "redirect:/board/list";
 	}
 
 	// Update form
 	@GetMapping("/update")
 	public String updateForm(Model model, @RequestParam Long id) {
-
 		Board board = boardService.updateForm(id);
 		model.addAttribute("board", board);
-
 		return "board/update";
 	}
 
 	// Update save
 	@PostMapping("/update")
-	public String updateBoard(@ModelAttribute Board board) {
-
+	public String updateBoard(@Valid @ModelAttribute Board board) {
 		boardService.update(board);
-
 		return "redirect:/board/list";
 	}
 
 	// Delete
 	@GetMapping("/delete")
 	public String deleteBoard(@RequestParam Long id) {
-
 		boardService.delete(id);
-
 		return "redirect:/board/list";
 	}
 }

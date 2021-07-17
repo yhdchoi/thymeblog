@@ -2,13 +2,14 @@ package com.yhdc.thymeblog.model;
 
 import java.sql.Timestamp;
 
-import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.EnumType;
 import javax.persistence.Enumerated;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.validation.constraints.NotEmpty;
+import javax.validation.constraints.Size;
 
 import org.hibernate.annotations.CreationTimestamp;
 import org.hibernate.annotations.UpdateTimestamp;
@@ -31,13 +32,15 @@ public class User {
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private Long id;
 
-	@Column(nullable = false, length = 50)
+	@NotEmpty
+	@Size(min = 8, max = 30, message = "Username must be between 8 to 30 characters.")
 	private String username;
 
-	@Column(nullable = false, length = 50)
+	@NotEmpty(message = "Email cannot be blank.")
 	private String email;
 
-	@Column(nullable = false, length = 100)
+	@NotEmpty
+	@Size(min = 8, max = 50, message = "Password must be between 8 to 20 characters.")
 	private String password;
 
 	@Enumerated(EnumType.STRING)

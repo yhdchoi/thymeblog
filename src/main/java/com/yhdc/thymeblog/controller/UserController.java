@@ -1,5 +1,7 @@
 package com.yhdc.thymeblog.controller;
 
+import javax.validation.Valid;
+
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -23,29 +25,23 @@ public class UserController {
 	// Detail
 	@GetMapping("/detail")
 	public String detail(Model model, @RequestParam Long id) {
-
 		User user = userService.detail(id);
 		model.addAttribute("user", user);
-
 		return "user/detail";
 	}
 
 	// Update
 	@GetMapping("/update")
 	public String updateForm(Model model, @RequestParam Long id) {
-
 		User user = userService.updateForm(id);
 		model.addAttribute("user", user);
-
 		return "user/update";
 	}
 
 	// Update save
 	@PostMapping("/update")
-	public String update(@ModelAttribute User user) {
-
+	public String update(@Valid @ModelAttribute User user) {
 		userService.update(user);
-
 		return "redirect:/user/detail";
 	}
 	

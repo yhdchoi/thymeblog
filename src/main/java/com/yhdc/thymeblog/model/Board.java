@@ -12,7 +12,7 @@ import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
-import javax.validation.constraints.NotNull;
+import javax.validation.constraints.NotEmpty;
 import javax.validation.constraints.Size;
 
 import org.hibernate.annotations.ColumnDefault;
@@ -37,10 +37,11 @@ public class Board {
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private Long id;
 
-	@NotNull
-	@Size(min = 5, max = 50, message = "The title must be between 5 to 50 words.")
+	@NotEmpty
+	@Size(min = 5, max = 50, message = "Title must be between 5 to 50 characters.")
 	private String title;
 
+	@NotEmpty(message = "Contents cannot be blank.")
 	@Column(columnDefinition = "text")
 	private String content;
 

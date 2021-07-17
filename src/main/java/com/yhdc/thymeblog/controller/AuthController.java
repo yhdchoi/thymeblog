@@ -4,7 +4,6 @@ import javax.validation.Valid;
 
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -29,7 +28,7 @@ public class AuthController {
 	}
 
 	@PostMapping("/login")
-	public String loginSubmit() {
+	public String loginSubmit(@Valid User user) {
 		//
 		return "redirect:/";
 	}
@@ -43,8 +42,8 @@ public class AuthController {
 
 	// New save
 	@PostMapping("/join")
-	public String registerUser(@Valid User user, BindingResult bindingResult) {
-		userService.register(user, bindingResult);
+	public String registerUser(@Valid User user) {
+		userService.register(user);
 		return "redirect:/";
 	}
 
