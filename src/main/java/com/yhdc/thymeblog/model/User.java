@@ -1,6 +1,6 @@
 package com.yhdc.thymeblog.model;
 
-import java.time.LocalDateTime;
+import java.sql.Timestamp;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -13,51 +13,42 @@ import javax.persistence.Id;
 import org.hibernate.annotations.CreationTimestamp;
 import org.hibernate.annotations.UpdateTimestamp;
 
-import com.fasterxml.jackson.annotation.JsonFormat;
-
-import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
-@Entity
 @Builder
 @AllArgsConstructor
-@NoArgsConstructor(access = AccessLevel.PROTECTED)
+@NoArgsConstructor
 @Getter
+@Setter
+@Entity
 public class User {
 
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private Long id;
 
+	@Column(nullable = false, length = 50)
 	private String username;
+
+	@Column(nullable = false, length = 50)
 	private String email;
 
-	@Setter
-	@Column(nullable = false)
+	@Column(nullable = false, length = 100)
 	private String password;
 
-	@Column(length = 1)
-	private int enabled;
+	@Enumerated(EnumType.STRING)
+	private RoleType role;
 
-	@Setter
-	@Column(nullable = false, length = 50)
-	private String role;
+	@Enumerated(EnumType.STRING)
+	private EnableType enable;
 
-//	@ManyToMany
-//	@JoinTable(name = "member_role", 
-//		joinColumns = @JoinColumn(name = "member_id"), 
-//		inverseJoinColumns = @JoinColumn(name = "role_id"))
-//	List<Role> memberRoles;
-
-	@JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd HH:mm:SS")
 	@CreationTimestamp
-	private LocalDateTime regDate;
+	private Timestamp regDate;
 
-	@JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd HH:mm:SS")
 	@UpdateTimestamp
-	private LocalDateTime modDate;
+	private Timestamp modDate;
 }

@@ -16,7 +16,7 @@
           <label for="title"> Title: </label>
           <input type="text" class="form-control" th:field="*{title}" id="title"
             th:classappend="${#fields.hasErrors('title')} ? 'is-invalid'"
-            placeholder="Title here..." />
+            placeholder="Title" />
           <div class="invalid-feedback" th:if="${#fields.hasErrors('title')}" th:errors="*{title}">
             Title error message</div>
         </div>
@@ -25,7 +25,7 @@
           <label> Content: </label>
           <textarea class="form-control" th:field="*{content}" id="content" rows="5"
             th:classappend="${#fields.hasErrors('content')} ? 'is-invalid'"
-            placeholder="Your thoughts here..."></textarea>
+            placeholder="Contents"></textarea>
           <div class="invalid-feedback" th:if="${#fields.hasErrors('content')}"
             th:errors="*{content}">Content error message</div>
         </div>

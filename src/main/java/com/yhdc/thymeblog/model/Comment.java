@@ -1,17 +1,17 @@
 package com.yhdc.thymeblog.model;
 
-import java.time.LocalDateTime;
+import java.sql.Timestamp;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.JoinColumn;
+import javax.persistence.ManyToOne;
 
 import org.hibernate.annotations.CreationTimestamp;
 import org.hibernate.annotations.UpdateTimestamp;
-
-import com.fasterxml.jackson.annotation.JsonFormat;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -19,12 +19,12 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
-@Entity
 @Builder
 @AllArgsConstructor
 @NoArgsConstructor
 @Getter
 @Setter
+@Entity
 public class Comment {
 
 	@Id
@@ -34,11 +34,17 @@ public class Comment {
 	@Column(columnDefinition = "text")
 	private String content;
 
-	@JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd HH:mm:SS")
-	@CreationTimestamp
-	private LocalDateTime regDate;
+	@ManyToOne
+	@JoinColumn(name = "boardId")
+	private Board board;
 
-	@JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd HH:mm:SS")
+	@ManyToOne
+	@JoinColumn(name = "userId")
+	private User user;
+
+	@CreationTimestamp
+	private Timestamp regDate;
+
 	@UpdateTimestamp
-	private LocalDateTime modDate;
+	private Timestamp modDate;
 }

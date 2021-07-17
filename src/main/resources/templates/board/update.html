@@ -29,6 +29,9 @@
           <textarea class="form-control" id="content" rows="10" th:field="*{content}"> Content </textarea>
         </div>
 
+        <input type="hidden" th:field="*{regDate}" />
+
+
         <button type="submit" class="btn btn-danger mt-4 me-2"
           th:href="@{/board/read(id=${board.id})}">Save</button>
         <a type="submit" class="btn btn-success mt-4 me-2" th:href="@{/board/read(id=${board.id})}">Back

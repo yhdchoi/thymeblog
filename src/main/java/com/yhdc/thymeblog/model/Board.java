@@ -1,19 +1,23 @@
 package com.yhdc.thymeblog.model;
 
-import java.time.LocalDateTime;
+import java.sql.Timestamp;
+import java.util.List;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.JoinColumn;
+import javax.persistence.ManyToOne;
+import javax.persistence.OneToMany;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
 
+import org.hibernate.annotations.ColumnDefault;
 import org.hibernate.annotations.CreationTimestamp;
 import org.hibernate.annotations.UpdateTimestamp;
-
-import com.fasterxml.jackson.annotation.JsonFormat;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -21,12 +25,12 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
-@Entity
 @Builder
 @AllArgsConstructor
 @NoArgsConstructor
 @Getter
 @Setter
+@Entity
 public class Board {
 
 	@Id
@@ -40,11 +44,19 @@ public class Board {
 	@Column(columnDefinition = "text")
 	private String content;
 
-	@JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd HH:mm:SS")
-	@CreationTimestamp
-	private LocalDateTime regDate;
+	@ColumnDefault("0")
+	private int count;
 
-	@JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd HH:mm:SS")
+	@ManyToOne
+	@JoinColumn(name = "userId")
+	private User user;
+
+	@OneToMany(mappedBy = "board", fetch = FetchType.EAGER)
+	private List<Comment> comments;
+
+	@CreationTimestamp
+	private Timestamp regDate;
+
 	@UpdateTimestamp
-	private LocalDateTime modDate;
+	private Timestamp modDate;
 }

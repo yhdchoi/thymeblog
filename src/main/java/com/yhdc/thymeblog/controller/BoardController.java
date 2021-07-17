@@ -4,6 +4,7 @@ import javax.validation.Valid;
 
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 import org.springframework.data.web.PageableDefault;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -15,8 +16,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 
 import com.yhdc.thymeblog.model.Board;
-import com.yhdc.thymeblog.repository.BoardRepository;
-import com.yhdc.thymeblog.validator.BoardValidator;
+import com.yhdc.thymeblog.service.BoardService;
 
 import lombok.RequiredArgsConstructor;
 
@@ -25,19 +25,17 @@ import lombok.RequiredArgsConstructor;
 @RequiredArgsConstructor
 public class BoardController {
 
-	private final BoardRepository repository;
-	private final BoardValidator validator;
+	private final BoardService boardService;
 
-	// List board
+	// Search and List
 	@GetMapping("/list")
-	public String list(Model model, @PageableDefault(10) Pageable pageable,
+	public String list(Model model,
+			@PageableDefault(size = 10, sort = "id", direction = Sort.Direction.DESC) Pageable pageable,
 			@RequestParam(required = false, defaultValue = "") String searchText) {
 
-//		Page<Board> boards = repository.findAll(pageable);
-		Page<Board> boards = repository.findByTitleContainingOrContentContaining(searchText, searchText, pageable);
-
-		int startPage = Math.max(1, boards.getPageable().getPageNumber() - 9);
-		int endPage = Math.min(boards.getTotalPages(), boards.getPageable().getPageNumber() + 9);
+		Page<Board> boards = boardService.listBoards(searchText, searchText, pageable);
+		int startPage = boardService.getStartPage(boards);
+		int endPage = boardService.getEndPage(boards);
 
 		model.addAttribute("startPage", startPage);
 		model.addAttribute("endPage", endPage);
@@ -46,65 +44,59 @@ public class BoardController {
 		return "board/list";
 	}
 
-	// Single board
+	// Detail
 	@GetMapping("/read")
-	public String read(Model model, @RequestParam Long id) {
+	public String detail(Model model, @RequestParam Long id) {
 
-		Board board = repository.getById(id);
+		Board board = boardService.getDetail(id);
 
 		model.addAttribute("board", board);
 
 		return "board/read";
 	}
 
-	// New Board form
+	// New form
 	@GetMapping("/register")
-	public String register(Model model) {
+	public String registerForm(Model model) {
 
 		model.addAttribute("board", new Board());
 
 		return "board/register";
 	}
 
-	// Save
+	// New save
 	@PostMapping("/register")
 	public String registerBoard(@Valid Board board, BindingResult bindingResult) {
 
-		validator.validate(board, bindingResult);
-
-		if (bindingResult.hasErrors()) {
-			return "board/register";
-		}
-
-		repository.save(board);
+		boardService.register(board, bindingResult);
 
 		return "redirect:/board/list";
 	}
 
 	// Update form
 	@GetMapping("/update")
-	public String update(Model model, @RequestParam Long id) {
+	public String updateForm(Model model, @RequestParam Long id) {
 
-		Board board = repository.findById(id).orElse(null);
+		Board board = boardService.updateForm(id);
 		model.addAttribute("board", board);
 
 		return "board/update";
 	}
 
-	// Save update
+	// Update save
 	@PostMapping("/update")
 	public String updateBoard(@ModelAttribute Board board) {
 
-		repository.save(board);
+		boardService.update(board);
 
 		return "redirect:/board/list";
 	}
 
-	// Remove
+	// Delete
 	@GetMapping("/delete")
 	public String deleteBoard(@RequestParam Long id) {
 
-		repository.deleteById(id);
+		boardService.delete(id);
 
 		return "redirect:/board/list";
 	}

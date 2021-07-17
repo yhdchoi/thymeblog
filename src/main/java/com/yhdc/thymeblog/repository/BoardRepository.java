@@ -10,9 +10,9 @@ import com.yhdc.thymeblog.model.Board;
 
 public interface BoardRepository extends JpaRepository<Board, Long> {
 
-	//Page
+	// Search title
 	List<Board> findByTitle(String title);
 	
-	//Search
+	// Search title and content
 	Page<Board> findByTitleContainingOrContentContaining(String title, String content, Pageable pageable);
 }
