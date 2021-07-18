@@ -5,7 +5,6 @@ import javax.validation.Valid;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -33,17 +32,17 @@ public class UserController {
 	// Update
 	@GetMapping("/update")
 	public String updateForm(Model model, @RequestParam Long id) {
-		User user = userService.updateForm(id);
+		User user = userService.updateForm(id);		
+		
 		model.addAttribute("user", user);
 		return "user/update";
 	}
 
 	// Update save
 	@PostMapping("/update")
-	public String update(@Valid @ModelAttribute User user) {
+	public String update(@Valid User user) {
 		userService.update(user);
 		return "redirect:/user/detail";
 	}
-	
-	
+
 }

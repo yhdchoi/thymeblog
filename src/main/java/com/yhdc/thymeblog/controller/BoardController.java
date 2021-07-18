@@ -9,7 +9,6 @@ import org.springframework.data.web.PageableDefault;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -75,7 +74,7 @@ public class BoardController {
 
 	// Update save
 	@PostMapping("/update")
-	public String updateBoard(@Valid @ModelAttribute Board board) {
+	public String updateBoard(@Valid Board board) {
 		boardService.update(board);
 		return "redirect:/board/list";
 	}

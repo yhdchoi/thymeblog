@@ -1,5 +1,6 @@
 package com.yhdc.thymeblog.service;
 
+import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
@@ -21,7 +22,7 @@ public class AdminService {
 		return users;
 	}
 
-	//TODO Refactoring
+	// TODO Refactoring
 	public int getStartPage(Page<User> users) {
 		int startPage = Math.max(1, users.getPageable().getPageNumber() - 9);
 		return startPage;
@@ -31,17 +32,29 @@ public class AdminService {
 		int endPage = Math.min(users.getTotalPages(), users.getPageable().getPageNumber() + 9);
 		return endPage;
 	}
-	
-	// Create User	
-	public String register(User user) {
-		//TODO Check Password
-		//TODO RoleType selection
+
+	// Detail
+	public User detail(Long id) {
+		User user = userRepository.findById(id).orElseThrow(() -> {
+			return new IllegalArgumentException("The user does not exist.");
+		});
+		return user;
+	}
+
+	// Create User
+	public void register(User user) {
+		// TODO Check Password
+		// TODO RoleType selection
 		userRepository.save(user);
-		return "";
 	}
 
 	// Delete User
-	public void deleteUser(Long id) {
-		userRepository.deleteById(id);
+	public String deleteUser(Long id) {
+		try {
+			userRepository.deleteById(id);
+		} catch (EmptyResultDataAccessException e) {
+			return "The user [" + id + "] does not exist.";
+		}
+		return "The user [" + id + "] has been deleted";
 	}
 }

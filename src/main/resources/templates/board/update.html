@@ -5,7 +5,7 @@
   <th:block th:fragment="content">
 
     <div class="container mt-4 mb-6">
-      <h1 class="text-center">Edit</h1>
+      <h1 class="text-center">Edit Post</h1>
 
       <form th:action="@{/board/update}" th:object="${board}" th:method="post">
 
@@ -14,7 +14,7 @@
         <div class="form-group mt-2">
           <label>
             Writer:
-            <!-- <span th:text="${board.username}"></span> -->
+            <!-- <span th:text="${board.user.username}"></span> -->
           </label>
         </div>
 

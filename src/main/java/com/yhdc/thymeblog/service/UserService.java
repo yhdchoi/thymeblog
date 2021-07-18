@@ -13,6 +13,8 @@ public class UserService {
 
 	private final UserRepository userRepository;
 
+	// Search and List
+
 	// Detail
 	public User detail(Long id) {
 		User user = userRepository.findById(id).orElseThrow(() -> {
@@ -23,7 +25,7 @@ public class UserService {
 
 	// New
 	public void register(User user) {
-		//TODO Check Password
+		// TODO Check Password
 		userRepository.save(user);
 
 	}
@@ -33,12 +35,15 @@ public class UserService {
 		User user = userRepository.findById(id).orElseThrow(() -> {
 			return new IllegalArgumentException("The user does not exist.");
 		});
+
 		return user;
 	}
 
 	public void update(User user) {
-		//TODO Replace only the changed
+
 		userRepository.save(user);
 	}
+
+	// Delete
 
 }

@@ -15,7 +15,6 @@ import org.springframework.web.bind.annotation.RequestParam;
 
 import com.yhdc.thymeblog.model.User;
 import com.yhdc.thymeblog.service.AdminService;
-import com.yhdc.thymeblog.service.UserService;
 
 import lombok.RequiredArgsConstructor;
 
@@ -25,9 +24,8 @@ import lombok.RequiredArgsConstructor;
 public class AdminController {
 
 	private final AdminService adminService;
-	private final UserService userService;
 
-	// User List
+// User List
 	@GetMapping("/ulist")
 	public String list(Model model,
 			@PageableDefault(size = 10, sort = "id", direction = Sort.Direction.DESC) Pageable pageable,
@@ -37,15 +35,15 @@ public class AdminController {
 		return "admin/ulist";
 	}
 
-	// Detail
+// User Detail
 	@GetMapping("/udetail")
 	public String detail(Model model, @RequestParam Long id) {
-		User user = userService.detail(id);
+		User user = adminService.detail(id);
 		model.addAttribute("user", user);
 		return "admin/udetail";
 	}
 
-	// Create User
+// Create User
 	@GetMapping("/ujoin")
 	public String registerForm(Model model) {
 		model.addAttribute("user", new User());
@@ -58,10 +56,12 @@ public class AdminController {
 		return "redirect:/admin/ulist";
 	}
 
-	// User Delete
+// User Delete
 	@GetMapping("/delete")
 	public String delete(@RequestParam Long id) {
 		adminService.deleteUser(id);
 		return "redirect:/admin/ulist";
 	}
+	
+	
 }
