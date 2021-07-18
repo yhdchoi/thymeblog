@@ -3,70 +3,85 @@
 
 <header class="p-3 bg-dark text-white">
   <div class="container">
-    <div class="d-flex flex-wrap align-items-center justify-content-center justify-content-lg-start">
+    <div class="d-flex">
       <a th:href="@{/}"
-        class="d-flex align-items-center me-4 mb-2 mb-lg-0 text-white fs-4 text-decoration-none">
-        DaBlog </a>
+        class="d-flex align-items-center me-auto mb-2 mb-lg-0 text-white fs-4 text-decoration-none">
+        DEVlog </a>
 
-      <ul class="nav col-12 col-lg-auto me-lg-auto mb-2 justify-content-center mb-md-0">
+      <!-- <ul class="nav col-12 col-lg-auto me-lg-auto mb-2 justify-content-center mb-md-0">
         <li>
-          <a th:href="@{/about}" class="nav-link px-2 text-info">About</a>
-        </li>
-        <li>
+          <a th:href="@{/about}" class="nav-link px-2 text-info">About us</a>
+        </li> -->
+      <!--  <li>
           <a th:href="@{/board/list}" class="nav-link px-2 text-success fw-bold">Board</a>
         </li>
         <li>
           <a th:href="@{/board/register}" class="nav-link px-2 text-primary fw-bold">Write</a>
+        </li> -->
+      <!-- <li>
+          <a th:href="@{/contact}" class="nav-link px-2 text-warning">Contact us</a>
         </li>
-        <li>
-          <a th:href="@{/contact}" class="nav-link px-2 text-warning">Contact</a>
-        </li>
-      </ul>
-
-      <!-- <form class="col-12 col-lg-auto mb-3 mb-lg-0 me-lg-3">
-        <input type="search" class="form-control form-control-dark" placeholder="Search..."
-          aria-label="Search">
-      </form> -->
+      </ul> -->
 
       <!-- logged out -->
-      <div class="text-end">
-        <a th:href="@{/auth/login}" type="button" class="btn btn-outline-primary me-2">Login </a>
-        <a th:href="@{/auth/join}" type="button" class="btn btn-danger">Join </a>
-      </div>
 
       <!-- logged in -->
       <!-- <div class="text-end">
-        <button type="button" class="btn btn-outline-light me-2">Logout</button>
+        <button type="button" class="btn btn-outline-warning me-4">Logout</button>
       </div> -->
 
+      <!-- <form>
+        <input type="search" class="form-control form-control-dark" placeholder="Search..."
+          aria-label="Search">
+        <button class="btn btn-outline-success my-2 my-sm-0" type="submit">Search</button>
+      </form> -->
+      
+      <form class="form-inline d-flex justify-content-center " method="GET"
+        th:action="@{/board/list}">
+        <input class="form-control me-2" id="searchText" name="searchText" type="search"
+          placeholder="Search" aria-label="Search">
+        <button class="btn btn-outline-info me-4" type="submit">Search</button>
+      </form>
 
-      <!-- <div class="dropdown">
-          <a href="#"
-            class="d-flex align-items-center text-white text-decoration-none dropdown-toggle"
-            id="dropdownUser" data-bs-toggle="dropdown" aria-expanded="false">
-            <img src="https://github.com/mdo.png" alt="" width="32" height="32"
-              class="rounded-circle me-2">
-            <strong>ADMIN</strong>
-          </a>
-          <ul class="dropdown-menu dropdown-menu-end dropdown-menu-dark text-small shadow"
-            aria-labelledby="dropdownUser">
-            <li>
-              <a class="dropdown-item" th:href="@{/user/profile}"> 마이 펫 </a>
-            </li>
-            <li>
-              <a class="dropdown-item" th:href="@{/user/dashboard}"> 대쉬보드 </a>
-            </li>
-            <li>
-              <a class="dropdown-item" th:href="@{/user/settings}"> 설정 </a>
-            </li>
-            <li>
-              <hr class="dropdown-divider">
-            </li>
-            <li>
-              <a class="dropdown-item" href="#">로그아웃</a>
-            </li>
-          </ul>
-        </div> -->
+      <div>
+        <a type="button" class="btn btn-outline-primary me-2" th:href="@{/auth/login}">Login </a>
+        <a type="button" class="btn btn-outline-danger me-4" th:href="@{/auth/join}">Join </a>
+      </div>
+
+      <div class="dropdown ">
+        <a href="#"
+          class="d-flex align-items-center text-white text-decoration-none dropdown-toggle"
+          id="dropdownUser" data-bs-toggle="dropdown" aria-expanded="false">
+
+          <!-- Profile Image -->
+          <img src="https://github.com/mdo.png" alt="" width="32" height="32"
+            class="rounded-circle me-2">
+
+          <strong id="username">Username</strong>
+
+        </a>
+        <ul class="dropdown-menu dropdown-menu-end dropdown-menu-dark text-small shadow"
+          aria-labelledby="dropdownUser">
+          <li>
+            <a class="dropdown-item" th:href="@{/user/detail}"> Profile </a>
+          </li>
+          <li>
+            <a class="dropdown-item" th:href="@{/board/list}"> My Boards </a>
+          </li>
+          <li>
+            <a class="dropdown-item" th:href="@{/board/register}"> Write New </a>
+          </li>
+          <li>
+            <a class="dropdown-item" th:href="@{/user/update}"> Report </a>
+          </li>
+          <li>
+            <hr class="dropdown-divider">
+          </li>
+          <li>
+            <a class="dropdown-item" href="#">Logout</a>
+          </li>
+        </ul>
+      </div>
 
     </div>
   </div>

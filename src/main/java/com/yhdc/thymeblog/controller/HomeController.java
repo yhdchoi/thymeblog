@@ -1,29 +1,23 @@
 package com.yhdc.thymeblog.controller;
 
 import org.springframework.stereotype.Controller;
-import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 
 @Controller
-@RequestMapping("/")
 public class HomeController {
 
-	@GetMapping("")
+	@RequestMapping("")
 	public String home() {
-
 		return "/index";
 	}
 
-	@GetMapping("/about")
+	@RequestMapping("/about")
 	public String about() {
-
 		return "/about";
 	}
 
-	@GetMapping("/contact")
+	@RequestMapping("/contact")
 	public String contact() {
-
 		return "/contact";
-
 	}
 }

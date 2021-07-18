@@ -1,5 +1,6 @@
 package com.yhdc.thymeblog.service;
 
+import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
@@ -15,49 +16,47 @@ public class BoardService {
 
 	private final BoardRepository boardRepository;
 
-	// Search and List
-	public Page<Board> listBoards(String title, String content, Pageable pageable) {
+	// Search List
+	public Page<Board> boardSearchList(String title, String content, Pageable pageable) {
 		Page<Board> boards = boardRepository.findByTitleContainingOrContentContaining(title, content, pageable);
+
 		return boards;
 	}
 
-	// TODO Refactoring
-	public int getStartPage(Page<Board> boards) {
-		int startPage = Math.max(1, boards.getPageable().getPageNumber() - 9);
-		return startPage;
-	}
-
-	public int getEndPage(Page<Board> boards) {
-		int endPage = Math.min(boards.getTotalPages(), boards.getPageable().getPageNumber() + 9);
-		return endPage;
-	}
-
 	// Detail
-	public Board getDetail(Long id) {
-		Board board = boardRepository.getById(id);
+	public Board read(Long id) {
+		Board board = boardRepository.findById(id).orElseThrow(() -> {
+			return new IllegalArgumentException("THE BOARD DOES NOT EXIST.");
+		});
 		return board;
 	}
 
-	// New
-	public String register(Board board) {
-		// TODO
-		boardRepository.save(board);
-		return "";
-	}
+	// New Board
+	public Board registerBoard(Board newBoard) {
+		Board board = boardRepository.save(newBoard);
 
-	// Update
-	public Board updateForm(Long id) {
-		Board board = boardRepository.findById(id).orElse(null);
 		return board;
 	}
 
-	public void update(Board board) {
-		boardRepository.save(board);
+	// Update Board
+	public Board updateBoard(Long id, Board newBoard) {
+		Board board = boardRepository.findById(id).orElseThrow(() -> {
+			return new IllegalArgumentException("THE BOARD DOES NOT EXIST.");
+		});
+
+		board.setTitle(newBoard.getTitle());
+		board.setContent(newBoard.getContent());
+
+		return board;
 	}
 
-	// Delete
-	public void delete(Long id) {
-		boardRepository.deleteById(id);
+	// Delete Board
+	public String deleteBoard(Long id) {
+		try {
+			boardRepository.deleteById(id);
+		} catch (EmptyResultDataAccessException e) {
+			return "THE BOARD DOES NOT EXIST.";
+		}
+		return "DELETED";
 	}
-
 }

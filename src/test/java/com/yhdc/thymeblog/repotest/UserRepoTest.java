@@ -19,8 +19,8 @@ public class UserRepoTest {
 
 	@Test
 	public void insert() {
-		IntStream.rangeClosed(1, 10).forEach(i -> {
-			User user = User.builder().username("User" + i).email("Email" + i + "@mail.com").password("password")
+		IntStream.rangeClosed(1, 20).forEach(i -> {
+			User user = User.builder().username("User" + i).email("Email" + i + "@mail.com").password("password1234")
 					.role(RoleType.USER).enable(EnableType.ENABLE).build();
 
 			userRepository.save(user);

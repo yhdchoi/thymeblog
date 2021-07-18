@@ -3,7 +3,49 @@
 
 <th:block th:replace="~{/basic :: setContent(~{this::content} )}">
   <th:block th:fragment="content">
-  
-  
+
+    <div class="container mt-4 mb-6">
+      <h3 class="text-center" th:text="${user.id}"></h3>
+
+
+      <div class="form-group mt-4">
+        <h5> Username: <span th:text="${user.username}"></span></h5>
+      </div>
+      
+      <div class="form-group mt-4">
+        <h5> Email: <span th:text="${user.email}"></span></h5>        
+      </div>
+      <div class="form-group mt-4">
+        <p> Joined: <span th:text="${#temporals.format(board.regDate, 'yyyy/MM/dd')}"></span></p>        
+      </div>
+
+      <div class="form-group mt-4">
+        <p> Updated: <span th:text="${#temporals.format(board.modDate, 'yyyy/MM/dd')}"></span></p>       
+      </div>
+            
+
+ <!-- BUTTONS -->
+        
+        <div class="text-right">
+        <a type="button" class="btn btn-warning mt-4 me-2" th:href="@{/user/update(id=${board.id})}">Edit</a>
+   
+        <a type="button" class="btn btn-danger mt-4 me-2" th:href="@{/user/delete(id=${board.id})}">Delete</a>
+
+        <a type="button" class="btn btn-success mt-4 me-2" th:href="@{/user/list}">Back to List</a>
+        </div>
+
+      <!-- <button type="button" class="btn btn-primary mt-4 me-2 addComment">Add New Comment</button>
+        
+      <div>
+        <button type="button" class="btn btn-info mt-4 commentCount">Show Comments
+          </button>
+        <div class="list-group commentList"></div>
+      </div> -->
+      
+    </div>
+    
+    
+
+
   </th:block>
 </th:block>

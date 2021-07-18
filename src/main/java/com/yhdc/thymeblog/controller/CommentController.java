@@ -1,7 +1,5 @@
 package com.yhdc.thymeblog.controller;
 
-import java.util.List;
-
 import javax.transaction.Transactional;
 import javax.validation.Valid;
 
@@ -28,19 +26,11 @@ import com.yhdc.thymeblog.repository.CommentRepository;
 import lombok.RequiredArgsConstructor;
 
 @RestController
-@RequestMapping("/api/comment")
+@RequestMapping("/comment/")
 @RequiredArgsConstructor
-public class CommentControllerApi {
+public class CommentController {
 
 	private final CommentRepository commentRepository;
-
-	// List
-	@GetMapping("/list")
-	public ResponseEntity<List<Comment>> all() {
-		List<Comment> comments = commentRepository.findAll();
-
-		return new ResponseEntity<List<Comment>>(comments, HttpStatus.OK);
-	}
 
 	// Search List
 	@GetMapping("/list")

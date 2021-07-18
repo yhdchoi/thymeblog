@@ -1,0 +1,81 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+
+<th:block th:replace="~{/basic :: setContent(~{this::content} )}">
+  <th:block th:fragment="content">
+    <div class="container mt-4 mb-6">
+
+      <!-- Head -->
+      <h1 class="text-center">User List</h1>
+      <div class="d-flex ">
+        <p class="me-4">
+          Total Users:
+          <span th:text="${users.totalElements}"></span>
+        </p>
+
+        <p>
+          Total Pages:
+          <span th:text="${users.totalPages}"></span>
+        </p>
+      </div>
+      
+       <!-- Search -->
+      <form class="form-inline d-flex justify-content-center my-2 my-lg-0" method="GET"
+        th:action="@{/user/list}">
+        <input class="form-control mr-sm-2 me-2" id="searchText" name="searchText" type="search"
+          placeholder="Search" aria-label="Search" th:value="${param.searchText}">
+        <button class="btn btn-outline-success my-2 my-sm-0" type="submit">Search</button>
+      </form>
+
+      <!-- Table -->
+      <table class="table table-hover">
+        <thead>
+          <tr>
+            <th scope="col">#</th>
+            <th scope="col">Username</th>
+            <th scope="col">Email</th>
+            <th scope="col">Joined</th>
+            
+          </tr>
+        </thead>
+        <tbody>
+          <tr th:each="user : ${users}">
+            <td th:text="${user.id}"></td>            
+            <td><a class="text-decoration-none" th:text="${user.username}"
+                th:href="@{/user/detail(id=${user.id})}"></a></td>
+            <td th:text="${user.email}"></td>
+            <td th:text="${#temporals.format(user.regDate, 'yyyy/MM/dd')}"></td>
+          </tr>
+        </tbody>
+      </table>
+
+
+      <!-- Page Control -->
+      <nav aria-label="Page navigation example">
+        <ul class="pagination justify-content-center">
+          <li class="page-item" th:classappend="${1 == users.pageable.pageNumber + 1} ? 'disabled'">
+            <a class="page-link" tabindex="-1" aria-disabled="true"
+              th:href="@{/user/list(page=${users.pageable.pageNumber - 1}, searchText=${param.searchText})}" aria-label="Previous">
+              <span aria-hidden="true">&laquo;</span>
+            </a>
+          </li>
+
+          <li class="page-item" th:classappend="${i == users.pageable.pageNumber + 1} ? 'disabled'"
+            th:each="i : ${#numbers.sequence(startPage, endPage)}">
+            <a class="page-link" th:href="@{/user/list(page=${i - 1}, searchText=${param.searchText})}" th:text="${i}">1</a>
+          </li>
+
+          <li class="page-item"
+            th:classappend="${users.totalPages == users.pageable.pageNumber + 1} ? 'disabled'">
+            <a class="page-link" th:href="@{/user/list(page=${users.pageable.pageNumber + 1}, searchText=${param.searchText})}"
+              aria-label="Next">
+              <span aria-hidden="true">&raquo;</span>
+            </a>
+          </li>
+        </ul>
+      </nav>
+
+
+    </div>
+  </th:block>
+</th:block>

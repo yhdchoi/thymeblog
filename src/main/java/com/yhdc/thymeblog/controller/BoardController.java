@@ -1,88 +1,87 @@
 package com.yhdc.thymeblog.controller;
 
+import javax.transaction.Transactional;
 import javax.validation.Valid;
 
+import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.data.web.PageableDefault;
-import org.springframework.stereotype.Controller;
-import org.springframework.ui.Model;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.RestController;
 
 import com.yhdc.thymeblog.model.Board;
-import com.yhdc.thymeblog.service.BoardService;
+import com.yhdc.thymeblog.repository.BoardRepository;
 
 import lombok.RequiredArgsConstructor;
 
-@Controller
+@RestController
 @RequestMapping("/board/")
 @RequiredArgsConstructor
 public class BoardController {
 
-	private final BoardService boardService;
+	private final BoardRepository boardRepository;
 
-	// Search and List
+	// Search List
 	@GetMapping("/list")
-	public String list(Model model,
-			@PageableDefault(size = 10, sort = "id", direction = Sort.Direction.DESC) Pageable pageable,
-			@RequestParam(required = false, defaultValue = "") String searchText) {
+	public ResponseEntity<Page<Board>> boardSearchList(@RequestParam String title, @RequestParam String content,
+			@PageableDefault(size = 10, sort = "id", direction = Sort.Direction.DESC) Pageable pageable) {
+		Page<Board> boards = boardRepository.findByTitleContainingOrContentContaining(title, content, pageable);
 
-		Page<Board> boards = boardService.listBoards(searchText, searchText, pageable);
-		int startPage = boardService.getStartPage(boards);
-		int endPage = boardService.getEndPage(boards);
-
-		model.addAttribute("startPage", startPage);
-		model.addAttribute("endPage", endPage);
-		model.addAttribute("boards", boards);
-
-		return "board/list";
+		return new ResponseEntity<Page<Board>>(boards, HttpStatus.OK);
 	}
 
 	// Detail
-	@GetMapping("/read")
-	public String detail(Model model, @RequestParam Long id) {
-		Board board = boardService.getDetail(id);
-		model.addAttribute("board", board);
-		return "board/read";
+	@GetMapping("/read/{id}")
+	public ResponseEntity<Board> read(@PathVariable Long id) {
+		Board board = boardRepository.findById(id).orElseThrow(() -> {
+			return new IllegalArgumentException("THE BOARD DOES NOT EXIST.");
+		});
+
+		return new ResponseEntity<Board>(board, HttpStatus.OK);
 	}
 
-	// New form
-	@GetMapping("/register")
-	public String registerForm(Model model) {
-		model.addAttribute("board", new Board());
-		return "board/register";
-	}
-
-	// New save
+	// New Board
 	@PostMapping("/register")
-	public String registerBoard(@Valid Board board) {
-		boardService.register(board);
-		return "redirect:/board/list";
+	public ResponseEntity<Board> registerBoard(@Valid @RequestBody Board newBoard) {
+		Board board = boardRepository.save(newBoard);
+
+		return new ResponseEntity<Board>(board, HttpStatus.OK);
 	}
 
-	// Update form
-	@GetMapping("/update")
-	public String updateForm(Model model, @RequestParam Long id) {
-		Board board = boardService.updateForm(id);
-		model.addAttribute("board", board);
-		return "board/update";
+	// Update Board
+	@Transactional
+	@PutMapping("/update/{id}")
+	public ResponseEntity<Board> updateBoard(@PathVariable Long id, @Valid @RequestBody Board newBoard) {
+		Board board = boardRepository.findById(id).orElseThrow(() -> {
+			return new IllegalArgumentException("THE BOARD DOES NOT EXIST.");
+		});
+
+		board.setTitle(newBoard.getTitle());
+		board.setContent(newBoard.getContent());
+
+		return new ResponseEntity<Board>(board, HttpStatus.OK);
 	}
 
-	// Update save
-	@PostMapping("/update")
-	public String updateBoard(@Valid Board board) {
-		boardService.update(board);
-		return "redirect:/board/list";
-	}
+	// Delete Board
+	@DeleteMapping("/delete/{id}")
+	public ResponseEntity<String> deleteBoard(@PathVariable Long id) {
+		try {
+			boardRepository.deleteById(id);
+		} catch (EmptyResultDataAccessException e) {
+			return new ResponseEntity<String>("THE BOARD DOES NOT EXIST.", HttpStatus.NOT_FOUND);
+		}
 
-	// Delete
-	@GetMapping("/delete")
-	public String deleteBoard(@RequestParam Long id) {
-		boardService.delete(id);
-		return "redirect:/board/list";
+		return new ResponseEntity<String>("DELETED", HttpStatus.OK);
 	}
 }

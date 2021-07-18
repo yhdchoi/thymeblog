@@ -3,17 +3,19 @@
 
 <th:block th:replace="~{/basic :: setContent(~{this::content} )}">
   <th:block th:fragment="content">
-    <div class="container mt-4">
+    <div class="container mt-4 text-center">
 
-      <form th:action="@{/auth/login}" method="post">
-        <img class="mb-3" width="70" height="70"
-          src="https://img.icons8.com/clouds/100/000000/typewriter-with-paper.png" />
-        <h1 class="h3 mb-3 fw-normal">Please sign in</h1>
+      <form action="/auth/login" method="post">
+
+        <h1 class="h3 mb-3 fw-bold">DEVlog</h1>
+
+        <h3 class="h3 mb-3 fw-normal">Please sign in</h3>
 
         <div class="form-floating">
           <input type="text" class="form-control" id="username" placeholder="Username">
           <label for="username">Email address</label>
         </div>
+
         <div class="form-floating">
           <input type="password" class="form-control" id="password" placeholder="Password">
           <label for="password">Password</label>
@@ -25,13 +27,13 @@
             Remember me
           </label>
         </div>
-        <button class="w-25 mb-4 btn btn-lg btn-primary" type="submit">Login</button>
-        <a class="w-25 mb-4 btn btn-lg btn-primary" type="submit" th:href="@{/auth/join}">Click to
-          join</a>
-        <a class="w-25 mb-4 btn btn-lg btn-primary" type="submit" th:href="@{/}">Home</a>
+        <button class="w-25 mb-4 btn btn-lg btn-outline-primary" id="btn-login" type="submit">Login</button>
+        <a class="w-25 mb-4 btn btn-lg btn-warning" type="submit" th:href="@{/auth/join}">Join</a>
+        <a class="w-25 mb-4 btn btn-lg btn-outline-success" type="submit" th:href="@{/}">Home</a>
 
         <p class="mt-5 text-muted">&copy; 2021</p>
       </form>
     </div>
+    
   </th:block>
 </th:block>
