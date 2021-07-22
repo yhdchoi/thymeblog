@@ -4,8 +4,6 @@ import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 
-import com.yhdc.thymeblog.service.UserService;
-
 import lombok.RequiredArgsConstructor;
 
 @Controller
@@ -13,7 +11,6 @@ import lombok.RequiredArgsConstructor;
 @RequiredArgsConstructor
 public class AuthController {
 
-	private final UserService userService;
 
 	@GetMapping("/join")
 	public String joinForm() {
